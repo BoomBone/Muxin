@@ -1,0 +1,23 @@
+spring:
+  datasource:
+    dbcp2:
+      url: jdbc:mysql://39.106.20.195:3306/muxin-dev?useUnicode=true&characterEncoding=utf8&useSSL=false
+      driver: com.mysql.jdbc.Driver
+      username: root
+      password: MiMa1234
+
+mybatis:
+  type-aliases-package: com.im.muxin.pojo
+  mapper-locations: classpath:mapper/*.xml
+
+mapper:
+  mappers:
+  - com.im.muxin.util.MyMapper
+  not-empty: false
+  identity: MYSQL
+
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
