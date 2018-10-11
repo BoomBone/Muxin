@@ -1,10 +1,5 @@
 spring:
   datasource:
-    dbcp2:
-      url: jdbc:mysql://39.106.20.195:3306/muxin-dev?useUnicode=true&characterEncoding=utf8&useSSL=false
-      driver: com.mysql.jdbc.Driver
-      username: root
-      password: MiMa1234
     type: com.zaxxer.hikari.HikariDataSource
     hikari:
       connection-timeout: 30000
@@ -15,6 +10,10 @@ spring:
       pool-name: DatabookHikariCP
       max-lifetime: 28740000
       connection-test-query: SELECT 1
+    driver-class-name: com.mysql.jdbc.Driver
+    data-username: root
+    data-password: MiMa1234
+    url: jdbc:mysql://39.106.20.195:3306/muxin-dev?useUnicode=true&characterEncoding=utf8&useSSL=false
 
 mybatis:
   type-aliases-package: com.im.muxin.pojo

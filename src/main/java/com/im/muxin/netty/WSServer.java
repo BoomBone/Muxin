@@ -18,7 +18,7 @@ public class WSServer {
         serverBootstrap = new ServerBootstrap();
         serverBootstrap.group(mainGroup, subGroup)
                 .channel(NioServerSocketChannel.class)
-                .childHandler(null);
+                .childHandler(new WSServerInitializer());
     }
 
     private static class SingletonWSServer {
