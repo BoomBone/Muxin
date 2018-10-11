@@ -10,6 +10,7 @@ import io.netty.handler.stream.ChunkedWriteHandler;
 
 public class WSServerInitializer extends ChannelInitializer<SocketChannel> {
 
+    @Override
     protected void initChannel(SocketChannel socketChannel) throws Exception {
         ChannelPipeline pipeline = socketChannel.pipeline();
         //webSocket基于Http协议,所以要有http编解码器

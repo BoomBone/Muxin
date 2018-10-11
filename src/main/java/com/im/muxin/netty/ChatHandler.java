@@ -19,6 +19,7 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
     private static ChannelGroup clients =
             new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
 
+    @Override
     protected void channelRead0(ChannelHandlerContext ctx, TextWebSocketFrame msg)
             throws Exception {
 
