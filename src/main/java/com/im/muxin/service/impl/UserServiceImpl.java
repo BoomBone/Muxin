@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService {
         Users result = usersMapper.selectOneByExample(userExample);
         return result;
     }
-
+    @Transactional(propagation = Propagation.SUPPORTS)
     @Override
     public Users saveUser(Users users) {
         String userId = sid.nextShort();

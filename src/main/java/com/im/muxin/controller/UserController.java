@@ -24,7 +24,7 @@ public class UserController {
     @PostMapping("/registerOrLogin")
     public IMoocJSONResult registerOrLogin(@RequestBody Users user) throws Exception {
         //0.判断用户名和密码不能为空
-        if (StringUtils.isBlank(user.getNickname()) ||
+        if (StringUtils.isBlank(user.getUsername()) ||
                 StringUtils.isBlank(user.getPassword())) {
             return IMoocJSONResult.errorMsg("用户名或密码不能为空。。。");
         }
@@ -45,6 +45,7 @@ public class UserController {
             user.setFaceImage("");
             user.setFaceImageBig("");
             user.setPassword(MD5Utils.getMD5Str(user.getPassword()));
+            userResult = userService.saveUser(user);
         }
 
         UsersVO usersVO = new UsersVO();
