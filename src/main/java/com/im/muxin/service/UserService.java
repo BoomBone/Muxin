@@ -29,4 +29,11 @@ public interface UserService {
      * @return
      */
     Users saveUser(Users users);
+
+    /**
+     *修改用户记录
+     */
+    Users updateUserInfo(Users user);
+
+    Users queryUserById(String userId);
 }
