@@ -72,7 +72,11 @@ public class UserServiceImpl implements UserService {
     }
 
 
-
+    /**
+     * 通过userId查询User
+     * @param userId
+     * @return
+     */
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
     public Users queryUserById(String userId) {

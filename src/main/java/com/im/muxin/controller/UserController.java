@@ -1,6 +1,7 @@
 package com.im.muxin.controller;
 
 
+import com.google.gson.Gson;
 import com.im.muxin.pojo.Users;
 import com.im.muxin.pojo.bo.UserBO;
 import com.im.muxin.pojo.vo.UsersVO;
@@ -31,6 +32,8 @@ public class UserController {
     @Autowired
     private FastDFSClient fastDFSClient;
 
+    Gson gson = new Gson();
+
     @PostMapping("/registerOrLogin")
     public IMoocJSONResult registerOrLogin(@RequestBody Users user) throws Exception {
         //0.判断用户名和密码不能为空
@@ -60,45 +63,9 @@ public class UserController {
 
         UsersVO usersVO = new UsersVO();
         BeanUtils.copyProperties(userResult, usersVO);
-
-        return IMoocJSONResult.ok(usersVO);
+        String usersVoJson = gson.toJson(usersVO);
+        return IMoocJSONResult.ok(usersVoJson);
     }
-
-//    /**
-//     * 上传头像
-//     *
-//     * @return
-//     */
-//    @PostMapping("/uploadFaceBase64")
-//    public IMoocJSONResult uploadFaceBase64(@RequestBody UserBO userBo) throws Exception {
-//        //获取前端传来的base64字符串，然后转换为文件对象再上传
-//
-//        String base64Data = userBo.getFaceData();
-//        String userFacePath = "C:\\" + userBo.getUserId() + "userface64.png";
-//        boolean toFile = FileUtils.base64ToFile(userFacePath, base64Data);
-//
-//        System.out.println("base64转换file="+toFile);
-////        System.out.println("base64="+base64Data);
-//
-//        //上传文件到fastdfs
-//        MultipartFile multipartFile = FileUtils.fileToMultipart(userFacePath);
-//        String url = fastDFSClient.uploadBase64(multipartFile);
-//        System.out.println(url);
-//
-//        //获取缩略图的url
-//        String thump = "_80x80.";
-//        String arr[] = url.split("\\.");
-//        String thumpImgUrl = arr[0] + thump + arr[1];
-//
-//        //更新用户头像
-//        Users user = new Users();
-//        user.setId(userBo.getUserId());
-//        user.setFaceImage(thumpImgUrl);
-//        user.setFaceImageBig(url);
-//        userService.updateUserInfo(user);
-//
-//        return IMoocJSONResult.ok(user);
-//    }
 
     /**
      * @Description: 上传用户头像
@@ -125,13 +92,22 @@ public class UserController {
         user.setFaceImageBig(url);
 
         Users result = userService.updateUserInfo(user);
-
-        return IMoocJSONResult.ok(result);
+        String userJson = gson.toJson(result);
+        return IMoocJSONResult.ok(userJson);
     }
 
     private String getUserId(HttpServletRequest request) throws Exception {
         String userId = request.getParameter("userId");
         System.out.println("userId=" + userId);
         return userId;
+    }
+
+    /**
+     * @Description: 获取用户头像地址
+     */
+    @PostMapping("/getFaceImage")
+    public IMoocJSONResult getUserPicUrl(String userId) throws Exception {
+        Users users = userService.queryUserById(userId);
+        return IMoocJSONResult.ok(users.getFaceImageBig());
     }
 }

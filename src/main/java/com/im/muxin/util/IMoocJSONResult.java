@@ -20,15 +20,15 @@ public class IMoocJSONResult {
     private String msg;
 
     // 响应中的数据
-    private Object data;
+    private String data;
     
     private String ok;	// 不使用
 
-    public static IMoocJSONResult build(Integer status, String msg, Object data) {
+    public static IMoocJSONResult build(Integer status, String msg, String data) {
         return new IMoocJSONResult(status, msg, data);
     }
 
-    public static IMoocJSONResult ok(Object data) {
+    public static IMoocJSONResult ok(String data) {
         return new IMoocJSONResult(data);
     }
 
@@ -40,7 +40,7 @@ public class IMoocJSONResult {
         return new IMoocJSONResult(500, msg, null);
     }
     
-    public static IMoocJSONResult errorMap(Object data) {
+    public static IMoocJSONResult errorMap(String data) {
         return new IMoocJSONResult(501, "error", data);
     }
     
@@ -60,13 +60,13 @@ public class IMoocJSONResult {
 //        return new LeeJSONResult(status, msg, null);
 //    }
 
-    public IMoocJSONResult(Integer status, String msg, Object data) {
+    public IMoocJSONResult(Integer status, String msg, String data) {
         this.status = status;
         this.msg = msg;
         this.data = data;
     }
 
-    public IMoocJSONResult(Object data) {
+    public IMoocJSONResult(String data) {
         this.status = 200;
         this.msg = "OK";
         this.data = data;
@@ -96,7 +96,7 @@ public class IMoocJSONResult {
         return data;
     }
 
-    public void setData(Object data) {
+    public void setData(String data) {
         this.data = data;
     }
 
