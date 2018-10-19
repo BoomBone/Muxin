@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("u")
@@ -61,39 +64,74 @@ public class UserController {
         return IMoocJSONResult.ok(usersVO);
     }
 
+//    /**
+//     * 上传头像
+//     *
+//     * @return
+//     */
+//    @PostMapping("/uploadFaceBase64")
+//    public IMoocJSONResult uploadFaceBase64(@RequestBody UserBO userBo) throws Exception {
+//        //获取前端传来的base64字符串，然后转换为文件对象再上传
+//
+//        String base64Data = userBo.getFaceData();
+//        String userFacePath = "C:\\" + userBo.getUserId() + "userface64.png";
+//        boolean toFile = FileUtils.base64ToFile(userFacePath, base64Data);
+//
+//        System.out.println("base64转换file="+toFile);
+////        System.out.println("base64="+base64Data);
+//
+//        //上传文件到fastdfs
+//        MultipartFile multipartFile = FileUtils.fileToMultipart(userFacePath);
+//        String url = fastDFSClient.uploadBase64(multipartFile);
+//        System.out.println(url);
+//
+//        //获取缩略图的url
+//        String thump = "_80x80.";
+//        String arr[] = url.split("\\.");
+//        String thumpImgUrl = arr[0] + thump + arr[1];
+//
+//        //更新用户头像
+//        Users user = new Users();
+//        user.setId(userBo.getUserId());
+//        user.setFaceImage(thumpImgUrl);
+//        user.setFaceImageBig(url);
+//        userService.updateUserInfo(user);
+//
+//        return IMoocJSONResult.ok(user);
+//    }
+
     /**
-     * 上传头像
-     *
-     * @return
+     * @Description: 上传用户头像
      */
     @PostMapping("/uploadFaceBase64")
-    public IMoocJSONResult uploadFaceBase64(@RequestBody UserBO userBo) throws Exception {
-        //获取前端传来的base64字符串，然后转换为文件对象再上传
+    public IMoocJSONResult uploadFaceBase64(HttpServletRequest request) throws Exception {
 
-        String base64Data = userBo.getFaceData();
-        String userFacePath = "C:\\" + userBo.getUserId() + "userface64.png";
-        boolean toFile = FileUtils.base64ToFile(userFacePath, base64Data);
-
-        System.out.println("base64转换file="+toFile);
-//        System.out.println("base64="+base64Data);
-
-        //上传文件到fastdfs
-        MultipartFile multipartFile = FileUtils.fileToMultipart(userFacePath);
-        String url = fastDFSClient.uploadBase64(multipartFile);
+        MultipartFile file = ((MultipartHttpServletRequest) request).getFile("file");
+        String url = fastDFSClient.uploadBase64(file);
         System.out.println(url);
 
-        //获取缩略图的url
+//		"dhawuidhwaiuh3u89u98432.png"
+//		"dhawuidhwaiuh3u89u98432_80x80.png"
+
+        // 获取缩略图的url
         String thump = "_80x80.";
         String arr[] = url.split("\\.");
         String thumpImgUrl = arr[0] + thump + arr[1];
 
-        //更新用户头像
+        // 更细用户头像
         Users user = new Users();
-        user.setId(userBo.getUserId());
+        user.setId(getUserId(request));
         user.setFaceImage(thumpImgUrl);
         user.setFaceImageBig(url);
-        userService.updateUserInfo(user);
 
-        return IMoocJSONResult.ok(user);
+        Users result = userService.updateUserInfo(user);
+
+        return IMoocJSONResult.ok(result);
+    }
+
+    private String getUserId(HttpServletRequest request) throws Exception {
+        String userId = request.getParameter("userId");
+        System.out.println("userId=" + userId);
+        return userId;
     }
 }
